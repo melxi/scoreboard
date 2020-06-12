@@ -5,10 +5,7 @@ const cors = require('cors')
 const config = require('./utils/config')
 const usersRouter = require('./routes/users')
 const app = express()
-
-app.use(express.json())
-app.use(cors())
-app.use(morgan("common"))
+const publicPath = path.join(__dirname, 'client/build');
 
 mongoose
     .connect(config.MONGODB_URI, {
@@ -18,6 +15,11 @@ mongoose
     })
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.log(err))
+
+app.use(express.json())
+app.use(cors())
+app.use(morgan("common"))
+app.use(express.static(publicPath));
 
 
 app.use('/api/users', usersRouter)
